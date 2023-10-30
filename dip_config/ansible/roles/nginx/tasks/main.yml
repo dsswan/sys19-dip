@@ -1,0 +1,32 @@
+---
+- name: apt update
+  apt:
+    update_cache: yes
+    
+- name: install nginx
+  apt:
+    name: nginx
+    state: latest
+  notify: nginx systemd
+
+- name: copy website files
+  copy:
+    src: website
+    dest: /var/www
+    mode: 0755
+
+- name: replace nginx config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify: restart nginx
+
+- name: start nginx handlers
+  meta: flush_handlers
+
+- name: Return service state information as fact data
+  service_facts:
+
+- name: Show the status of nginx service
+  debug:
+    var: ansible_facts.services['nginx.service']['state']

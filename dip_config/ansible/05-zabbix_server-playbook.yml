@@ -1,0 +1,6 @@
+- hosts: zabbix
+  remote_user: dml
+  become: yes
+  become_method: sudo
+  roles:
+    - zabbix_server

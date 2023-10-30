@@ -1,0 +1,37 @@
+---
+- name: apt update
+  apt:
+    update_cache: yes
+
+- name: copy filebeat.deb
+  copy:
+    src: filebeat-7.17.9-amd64.deb
+    dest: /tmp
+
+- name: install filebeat
+  apt:
+    deb: /tmp/filebeat-7.17.9-amd64.deb
+
+- name: replace config file
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+  notify:
+    - enable filebeat
+
+- name: setup filebeat
+  shell: 'filebeat setup'
+
+- name: start filebeat
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: filebeat.service
+
+- name: Return service state information as fact data
+  service_facts:
+
+- name: Show the status of filebeat service
+  debug:
+    var: ansible_facts.services['filebeat.service']['state']

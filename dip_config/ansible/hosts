@@ -1,0 +1,34 @@
+
+[bastion]
+bastion-host ansible_host=158.160.57.253 ansible_ssh_user=dml
+
+[webservers]
+web1 ansible_host=192.168.10.10
+web2 ansible_host=192.168.20.10
+
+[elastic]
+elastic-host ansible_host=192.168.10.111
+
+[kibana]
+kibana-host ansible_host=192.168.10.112
+
+[zabbix]
+zabbix-host ansible_host=192.168.10.110
+
+[webservers:vars]
+ansible_ssh_user=dml
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+
+[elastic:vars]
+ansible_ssh_user=dml
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+
+[kibana:vars]
+ansible_ssh_user=dml
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+
+[zabbix:vars]
+ansible_ssh_user=dml
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+
+

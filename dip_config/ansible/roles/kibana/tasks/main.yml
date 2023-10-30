@@ -1,0 +1,53 @@
+---
+- name: Install reqs for Docker
+  apt: 
+    name: 
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest 
+    update_cache: yes
+
+- name: Add the GPG key for Docker
+  shell: 'curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg'
+
+- name: Add the repository
+  shell: 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" | tee /etc/apt/sources.list.d/docker.list'
+
+- name: Update and install docker
+  apt: 
+    update_cache: yes
+    name: docker-ce
+    state: latest
+
+
+- name: Install the Docker module for Python
+  pip:
+    name: docker
+  notify: docker systemd
+
+- name: Create container
+  docker_container:
+    name: "Kibana"
+    image: "kibana:8.6.2"
+    ports:
+    - "5601:5601"
+    env:
+        ELASTICSEARCH_HOSTS='["http://{{ hostvars['elastic-host'].ansible_host }}:9200"]'
+    state: started
+    restart_policy: always
+
+- name: docker container ls -a
+  tags: container_ls
+  shell: "docker container ls -a"
+  register: container_info
+
+- name: docker container ls -a result
+  tags: container_ls
+  debug:
+    msg: "{{container_info.stdout_lines}}"
