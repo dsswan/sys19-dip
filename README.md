@@ -32,9 +32,10 @@ terraform {
   required_version = ">= 0.13"
 }
 
+
 # Описание провайдера YC
 provider "yandex" {
-  token     = var.token_id
+  service_account_key_file = "${file("~/authorized_key.json")}"
   cloud_id  = var.cloud_id
   folder_id = var.folder_id
   zone      = var.default_zone
@@ -47,10 +48,7 @@ provider "yandex" {
 
 ```bash
 #=========== main ==============
-variable "token_id" {
-  description = "The token"
-  type        = string
-}
+
 variable "cloud_id" {
   description = "The cloud ID"
   type        = string
@@ -65,6 +63,7 @@ variable "default_zone" {
   default     = "ru-cenral1-a"
 }
 
+
 #=========== subnet ==============
 variable "subnets" {
   description = "Subnets for www cluster"
@@ -77,6 +76,7 @@ variable "subnets" {
     }))
   )
 }
+
 ```
 </details>
 <details>
@@ -84,9 +84,8 @@ variable "subnets" {
 
 ```bash
 #=========== main ==============
-token_id  = "y0_AgAAxxxx"
-cloud_id  = "b1g31l99xxxx"
-folder_id = "b1g5412cxxxx"
+cloud_id  = "b1g31l9912a5snugc28a"
+folder_id = "b1g5412cb8jjfmnc09pb"
 
 #=========== subnet ==============
 subnets = {
@@ -719,24 +718,24 @@ App load balancer
 external = ${yandex_alb_load_balancer.load-balancer.listener.0.endpoint.0.address.0.external_ipv4_address.0.address}
 
 VM bastion
-internal = ${yandex_compute_instance.bastion.network_interface.0.ip_address}
+internal = ${yandex_compute_instance.bastion.fqdn}
 external = ${yandex_compute_instance.bastion.network_interface.0.nat_ip_address}
 
 VM web1
-internal = ${yandex_compute_instance.web1.network_interface.0.ip_address}
+internal = ${yandex_compute_instance.web1.fqdn}
 
 VM web2
-internal = ${yandex_compute_instance.web2.network_interface.0.ip_address}
+internal = ${yandex_compute_instance.web2.fqdn}
 
 VM Elastic
-internal = ${yandex_compute_instance.elastic.network_interface.0.ip_address}
+internal = ${yandex_compute_instance.elastic.fqdn}
 
 VM Kibana
-internal = ${yandex_compute_instance.kibana.network_interface.0.ip_address}
+internal = ${yandex_compute_instance.kibana.fqdn}
 external = ${yandex_compute_instance.kibana.network_interface.0.nat_ip_address}
 
 VM Zabbix
-internal = ${yandex_compute_instance.zabbix.network_interface.0.ip_address}
+internal = ${yandex_compute_instance.zabbix.fqdn}
 external = ${yandex_compute_instance.zabbix.network_interface.0.nat_ip_address}
 
 OUTPUT
@@ -749,17 +748,17 @@ output "output-ansible-hosts" {
 bastion-host ansible_host=${yandex_compute_instance.bastion.network_interface.0.nat_ip_address} ansible_ssh_user=dml
 
 [webservers]
-web1 ansible_host=${yandex_compute_instance.web1.network_interface.0.ip_address}
-web2 ansible_host=${yandex_compute_instance.web2.network_interface.0.ip_address}
+web1 ansible_host=${yandex_compute_instance.web1.fqdn}
+web2 ansible_host=${yandex_compute_instance.web2.fqdn}
 
 [elastic]
-elastic-host ansible_host=${yandex_compute_instance.elastic.network_interface.0.ip_address}
+elastic-host ansible_host=${yandex_compute_instance.elastic.fqdn}
 
 [kibana]
-kibana-host ansible_host=${yandex_compute_instance.kibana.network_interface.0.ip_address}
+kibana-host ansible_host=${yandex_compute_instance.kibana.fqdn}
 
 [zabbix]
-zabbix-host ansible_host=${yandex_compute_instance.zabbix.network_interface.0.ip_address}
+zabbix-host ansible_host=${yandex_compute_instance.zabbix.fqdn}
 
 [webservers:vars]
 ansible_ssh_user=dml
@@ -838,40 +837,37 @@ sed -i '1d; $d' hosts
 <summary>hosts</summary>
 
 ```bash
-
 [bastion]
-bastion-host ansible_host=158.160.57.253 ansible_ssh_user=dml
+bastion-host ansible_host=84.201.173.142 ansible_ssh_user=dml
 
 [webservers]
-web1 ansible_host=192.168.10.10
-web2 ansible_host=192.168.20.10
+web1 ansible_host=web1.ru-central1.internal
+web2 ansible_host=web2.ru-central1.internal
 
 [elastic]
-elastic-host ansible_host=192.168.10.111
+elastic-host ansible_host=elastic.ru-central1.internal
 
 [kibana]
-kibana-host ansible_host=192.168.10.112
+kibana-host ansible_host=kibana.ru-central1.internal
 
 [zabbix]
-zabbix-host ansible_host=192.168.10.110
+zabbix-host ansible_host=zabbix.ru-central1.internal
 
 [webservers:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
 
 [elastic:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
 
 [kibana:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
 
 [zabbix:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.57.253"'
-
-
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
 ```
 </details>
 

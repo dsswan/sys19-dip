@@ -1,8 +1,8 @@
 - hosts:
-    bastion
     webservers
-    elastic
-    kibana
+    # bastion
+    # elastic
+    # kibana
   remote_user: dml
   become: yes
   become_method: sudo

@@ -1,8 +1,5 @@
 #=========== main ==============
-variable "token_id" {
-  description = "The token"
-  type        = string
-}
+
 variable "cloud_id" {
   description = "The cloud ID"
   type        = string

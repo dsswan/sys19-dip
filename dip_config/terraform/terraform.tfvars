@@ -1,5 +1,4 @@
 #=========== main ==============
-token_id  = "y0_AgAAAAAE7VMoAATuwQAAAADhfojTCMjOLAAAQ1iuBmYD4eRCrbIdRyk"
 cloud_id  = "b1g31l9912a5snugc28a"
 folder_id = "b1g5412cb8jjfmnc09pb"
 
