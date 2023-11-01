@@ -918,3 +918,5 @@ ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
 
 ![](_attachments/dip_306_mon_zbx_web.png)  
 
+Настройка мониторинга веб - сайтов  
+![](_attachments/dip_307_mon_zbx_web.png)
