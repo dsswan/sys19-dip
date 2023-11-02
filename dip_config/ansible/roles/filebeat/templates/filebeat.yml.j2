@@ -1,24 +1,11 @@
 # ============================== Filebeat inputs ===============================
 
 filebeat.inputs:
-
-# Each - is an input. Most options can be set at the input level, so
-# you can use different inputs for various configurations.
-# Below are the input specific configurations.
-
-# filestream is an input for collecting log messages from files.
-- type: filestream
-
-  # Unique ID among all inputs, an ID is required.
-  id: my-filestream-id
-
-  # Change to true to enable this input configuration.
-  enabled: true
-
-  # Paths that should be crawled and fetched. Glob based paths.
-  paths:
-    - /var/log/nginx/*.log
-    #- c:\programdata\elasticsearch\logs\*
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/access.log
+      - /var/log/nginx/error.log
 
 # ============================== Filebeat modules ==============================
 
@@ -168,11 +155,8 @@ output.elasticsearch:
 
 # ================================= Processors =================================
 processors:
-  - add_host_metadata:
-      when.not.contains.tags: forwarded
-  - add_cloud_metadata: ~
-  - add_docker_metadata: ~
-  - add_kubernetes_metadata: ~
+  - drop_fields:
+      fields: ["beat", "input_type", "prospector", "input", "agent", "ecs"]
 
 # ================================== Logging ===================================
 

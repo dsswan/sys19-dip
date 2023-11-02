@@ -1,6 +1,6 @@
 
 [bastion]
-bastion-host ansible_host=84.201.173.142 ansible_ssh_user=dml
+bastion-host ansible_host=158.160.119.238 ansible_ssh_user=dml
 
 [webservers]
 web1 ansible_host=web1.ru-central1.internal
@@ -17,18 +17,18 @@ zabbix-host ansible_host=zabbix.ru-central1.internal
 
 [webservers:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.119.238"'
 
 [elastic:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.119.238"'
 
 [kibana:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.119.238"'
 
 [zabbix:vars]
 ansible_ssh_user=dml
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@84.201.173.142"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p dml@158.160.119.238"'
 
 

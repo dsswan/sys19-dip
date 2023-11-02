@@ -129,13 +129,13 @@ resource "yandex_compute_instance" "zabbix" {
 
   resources {
     cores  = 4
-    memory = 4
+    memory = 8
   }
 
   boot_disk {
     initialize_params {
       image_id = "fd87gocdmk3tosg6onpg"
-      size = 10
+      size = 15
     }
   }
 

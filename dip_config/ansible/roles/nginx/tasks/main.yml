@@ -11,9 +11,14 @@
 
 - name: copy website files
   copy:
-    src: website
+    src: html
     dest: /var/www
     mode: 0755
+
+- name: add stub_status.conf
+  copy:
+    src: stub_status.conf
+    dest: /etc/nginx/conf.d/stub_status.conf
 
 - name: replace nginx config
   copy:
